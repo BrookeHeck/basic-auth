@@ -11,7 +11,7 @@ const base64 = require('base-64');
 
 const Users = require('./models/users');
 
-// Process FORM intput and put the data on req.body
+// Process FORM input and put the data on req.body
 app.use(express.urlencoded({ extended: true }));
 
 

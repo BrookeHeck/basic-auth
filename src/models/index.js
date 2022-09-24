@@ -20,5 +20,5 @@ const UserModel = userSchema(sequelize, DataTypes);
 
 module.exports = {
   db: sequelize,
-  User: new Collection(UserModel),
+  Users: new Collection(UserModel),
 };

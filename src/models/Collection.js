@@ -5,9 +5,9 @@ class Collection {
     this.model = model;
   }
 
-  async read(id) {
+  async read(username) {
     try {
-      return id ? this.model.findOne( { where: { id: id } }) : this.model.findAll();
+      return username ? this.model.findOne( { where: { username: username } }) : this.model.findAll();
     } catch(e) { console.log(e); }
   }
 

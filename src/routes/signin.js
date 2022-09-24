@@ -5,8 +5,7 @@ const router = express.Router();
 const logger = require('./../middleware/logger');
 const authentication = require('./../../auth/authentication');
 const bcrypt = require('bcrypt');
-const base64 = require('base-64');
-const { Users } = require('./../models/users');
+const { Users } = require('./../models');
 
 
 // Signup Route -- create a new user
@@ -18,47 +17,22 @@ router.post('/signup', logger, async (req, res) => {
     req.body.password = await bcrypt.hash(req.body.password, 10);
     const record = await Users.create(req.body);
     res.status(200).send(record);
-  } catch (e) { res.status(403).send('Error Creating User'); }
+  } catch (e) {
+    console.log(e);
+    res.status(403).send('Error Creating User');
+  }
 });
 
 // Signin Route -- login with username and password
 // test with httpie
 // http post :3000/signin -a john:foo
-router.post('/signin', logger, authentication, async (req, res) => {
-
-  /*
-    req.headers.authorization is : "Basic sdkjdsljd="
-    To get username and password from this, take the following steps:
-      - Turn that string into an array by splitting on ' '
-      - Pop off the last value
-      - Decode that encoded string so it returns to user:pass
-      - Split on ':' to turn it into an array
-      - Pull username and password from that array
-  */
-
-  let basicHeaderParts = req.headers.authorization.split(' ');  // ['Basic', 'sdkjdsljd=']
-  let encodedString = basicHeaderParts.pop();  // sdkjdsljd=
-  let decodedString = base64.decode(encodedString); // "username:password"
-  let [username, password] = decodedString.split(':'); // username, password
-
-  /*
-    Now that we finally have username and password, let's see if it's valid
-    1. Find the user in the database by username
-    2. Compare the plaintext password we now have against the encrypted password in the db
-       - bcrypt does this by re-encrypting the plaintext password and comparing THAT
-    3. Either we're valid or we throw an error
-  */
+router.post('/signin', logger, authentication, async (request, response) => {
   try {
-    const user = await Users.findOne({ where: { username: username } });
-    const valid = await bcrypt.compare(password, user.password);
-    if (valid) {
-      res.status(200).send(user);
-    }
-    else {
-      throw new Error('Invalid User');
-    }
-  } catch (error) { res.status(403).send('Invalid Login'); }
-
+    response.status(200).send(request.body);
+  } catch(e) {
+    console.log(e);
+    response.status(403).send('Error logging in');
+  }
 });
 
 module.exports = router;

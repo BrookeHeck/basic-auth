@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const logger = require('./../middleware/logger');
-const authentication = require('./../../auth/authentication');
+const authentication = require('../middleware/authentication');
 const bcrypt = require('bcrypt');
 const { Users } = require('./../models');
 
@@ -29,7 +29,7 @@ router.post('/signup', logger, async (req, res) => {
 router.post('/signin', logger, authentication, async (request, response) => {
   try {
     response.status(200).send(request.body);
-  } catch(e) {
+  } catch (e) {
     console.log(e);
     response.status(403).send('Error logging in');
   }

@@ -2,7 +2,7 @@
 
 const bcrypt = require('bcrypt');
 const base64 = require('base-64');
-const { Users } = require('./../src/models');
+const { Users } = require('../models');
 
 const authentication = async (request, response, next) => {
   /*

@@ -7,6 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 const signin = require('./routes/signin');
+const signup = require('./routes/signup');
 
 const send404 = require('./error-handlers/404');
 const send500 = require('./error-handlers/500');
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (response, request) => response.status(200).send('Server'));
 app.use(signin);
+app.use(signup);
 app.get('*', send404);
 app.use(send500);
 
